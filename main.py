@@ -16,7 +16,8 @@ origins = [
     "http://localhost:3000",
     "http://localhost:8080",
     "http://51.250.31.26",
-    "https://tourmaline-gumdrop-2b950a.netlify.app/"
+    "https://tourmaline-gumdrop-2b950a.netlify.app/",
+    "http://acrid-silver.surge.sh/",
 ]
 
 app.add_middleware(
