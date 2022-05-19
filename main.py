@@ -15,6 +15,7 @@ origins = [
     "https://localhost.tiangolo.com",
     "http://localhost:3000",
     "http://localhost:8080",
+    "http://51.250.31.26"
 ]
 
 app.add_middleware(
