@@ -15,7 +15,8 @@ origins = [
     "https://localhost.tiangolo.com",
     "http://localhost:3000",
     "http://localhost:8080",
-    "http://51.250.31.26"
+    "http://51.250.31.26",
+    "https://tourmaline-gumdrop-2b950a.netlify.app/"
 ]
 
 app.add_middleware(
