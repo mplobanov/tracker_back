@@ -18,7 +18,8 @@ origins = [
     "http://51.250.31.26",
     "https://tourmaline-gumdrop-2b950a.netlify.app",
     "http://acrid-silver.surge.sh",
-    "https://tracker-76600.web.app"
+    "https://tracker-76600.web.app",
+    "https://tracker.lbnv.mp",
 ]
 
 app.add_middleware(
