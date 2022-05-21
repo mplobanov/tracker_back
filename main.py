@@ -43,6 +43,9 @@ async def add_process_time_header(request: Request, call_next):
     except exceptions.FirebaseError as e:
         print(e)
         return Response(status_code=status.HTTP_401_UNAUTHORIZED, content="Auth Failure")
+    except KeyError as e:
+        print(e)
+        return Response(status_code=status.HTTP_401_UNAUTHORIZED, content="Auth Failure")
 
 cred = credentials.Certificate("tracker-76600-firebase-adminsdk-lvk4v-9a08a9c604.json")
 firebase_admin.initialize_app(cred)
@@ -137,3 +140,10 @@ async def get_status_list():
 async def get_status_list(status: Status):
     _, doc_ref = db.collection('statuses').add(status.dict())
     return Status(**db.collection('statuses').document(doc_ref.id).get().to_dict())
+
+
+@app.get('/userlist', response_model=tp.List[UserEntry])
+async def get_user_list():
+    users = list(auth.list_users().iterate_all())
+    print(users[0].uid)
+    return [UserEntry(user=User(name=user.display_name, photoUrl=user.photo_url), uid=user.uid) for user in users]

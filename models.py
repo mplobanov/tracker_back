@@ -20,6 +20,7 @@ class Task(BaseModel):
     deadline: tp.Optional[datetime.datetime]
     status: str
 
+
 class Status(BaseModel):
     name: str
 
@@ -27,6 +28,11 @@ class Status(BaseModel):
 class User(BaseModel):
     name: str
     photoUrl: str
+
+
+class UserEntry(BaseModel):
+    uid: str
+    user: User
 
 
 class Message(BaseModel):
