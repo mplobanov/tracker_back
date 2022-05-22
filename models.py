@@ -17,8 +17,10 @@ class Task(BaseModel):
     assignee_id: str
     follower_ids: tp.List[str]
     slug: str
-    deadline: tp.Optional[datetime.datetime]
+    start_time: datetime.datetime
+    deadline: datetime.datetime
     status: str
+    tags: tp.List[str]
 
 
 class Status(BaseModel):

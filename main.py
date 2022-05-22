@@ -52,6 +52,32 @@ firebase_admin.initialize_app(cred)
 
 db = firestore.client()
 
+EMPTY_TASK: Task = Task(
+    **{
+        "name": "string",
+        "description": "string",
+        "author_id": "2y2NUW9AR8hy4YM5OF2InfzeaE32",
+        "comments": [
+            {
+                "author_id": "string",
+                "text": "string",
+                "created_at": "2022-05-22T18:25:59.448Z"
+            }
+        ],
+        "assignee_id": "2y2NUW9AR8hy4YM5OF2InfzeaE32",
+        "follower_ids": [
+            "2y2NUW9AR8hy4YM5OF2InfzeaE32"
+        ],
+        "slug": "string",
+        "start_time": "2022-05-22T18:25:59.448Z",
+        "deadline": "2022-05-22T18:25:59.448Z",
+        "status": "string",
+        "tags": [
+            "string"
+        ]
+    }
+)
+
 
 async def get_uid(authorization=Header(default='a b')):
     token = authorization.split()[1]
@@ -62,13 +88,13 @@ async def get_uid(authorization=Header(default='a b')):
 @app.get("/list", response_model=tp.List[Task])
 async def all_tasks() -> tp.List[Task]:
     docs = db.collection('tasks').stream()
-    return [doc.to_dict() for doc in docs]
+    return [EMPTY_TASK.dict() | doc.to_dict() for doc in docs]
 
 
 @app.get("/task/{slug}", response_model=tp.List[Task])
 async def get_task(slug: str) -> tp.List[Task]:
     docs = db.collection('tasks').where('slug', '==', slug).stream()
-    return [doc.to_dict() for doc in docs]
+    return [EMPTY_TASK.dict() | doc.to_dict() for doc in docs]
 
 
 @app.get('/user/{uid}', response_model=User, responses={
@@ -104,7 +130,7 @@ async def update_task(slug: str, task: Task):
             "message": f"Wanted to find one, found {len(docs)}"
         })
     doc = docs[0]
-    old_task = Task(**db.collection('tasks').document(doc.id).get().to_dict())
+    old_task = Task(**(EMPTY_TASK.dict() | db.collection('tasks').document(doc.id).get().to_dict()))
     if old_task.slug != task.slug:
         if check_slug(task.slug):
             return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content={
@@ -113,7 +139,7 @@ async def update_task(slug: str, task: Task):
     print(old_task)
     # TODO check for comments
     db.collection('tasks').document(doc.id).set(task.dict(), merge=True)
-    return Task(**db.collection('tasks').document(doc.id).get().to_dict())
+    return Task(**(EMPTY_TASK.dict() | db.collection('tasks').document(doc.id).get().to_dict()))
 
 
 @app.post('/task/create', response_model=Task, responses={
@@ -127,7 +153,7 @@ async def create_task(task: Task):
             "message": f"Slug already taken"
         })
     _, doc_ref = db.collection('tasks').add(task.dict())
-    return Task(**db.collection('tasks').document(doc_ref.id).get().to_dict())
+    return Task(**(EMPTY_TASK.dict() | db.collection('tasks').document(doc_ref.id).get().to_dict()))
 
 
 @app.get('/status/list', response_model=tp.List[Status])
